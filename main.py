@@ -1,23 +1,21 @@
 import socket
 
-ip_or_domain = input("Enter IP or domain: ")
-ports = input("Port(s) separated by comma (e.g.: 21,22,23): ")
+ip_or_domain = [""]  # insert ip or domain here
+ports = []  # insert port(s)
 
-portsList = []
+services = len(ip_or_domain)
+for j in range(services):
+    print(f"[*] Scanning {ip_or_domain[j]}")
+    for i in range(len(ports)):
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.settimeout(0.5)
 
-if ',' in ports:
-    portsList = ports.split(",")
-else:
-    portsList = ports
+        code = client.connect_ex((ip_or_domain[j], int(ports[i])))
 
-for i in range(len(portsList)):
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.settimeout(0.5)
-    
-    code = client.connect_ex((ip_or_domain, int(portsList[i])))
-    
-    if code == 0:
-        print(f"[*] - {portsList[i]}  OPEN")
-    # else:
-        # print(f"[*] - {portsList[i]} CLOSED")
-
+        if code == 0:
+            print(f"[*] - {ports[i]}  OPEN")
+        else:
+            print(f"[-] - {ports[i]} CLOSED")
+        
+        if i == len(ports) - 1:
+            print("\n")
